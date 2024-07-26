@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: weops-lite
+  namespace: weops-lite
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`keycloak.weops.com`)
+      kind: Rule
+      services:
+      - name: keycloak
+        port: 8080
+    - match: Host(`weops-lite.weops.com`)
+      kind: Rule
+      services:
+      - name: weops-lite
+        port: 8000

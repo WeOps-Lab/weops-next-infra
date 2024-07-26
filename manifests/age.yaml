@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: age
+  namespace: weops-lite
+  labels:
+    app: age
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: age
+  template:
+    metadata:
+      labels:
+        app: age
+    spec:
+      containers:
+      - name: age
+        image: docker-bkrepo.cwoa.net/ce1b09/weops-docker/age:PG16-1.1.5
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: weops-lite-secret
+              key: POSTGRES_PASSWORD
+        - name: PGDATA
+          value: "/data/postgres"
+        - name: POSTGRES_DB
+          value: "weops-lite"
+        volumeMounts:
+        - mountPath: /data/postgres
+          name: postgres-storage
+        readinessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: age-pvc

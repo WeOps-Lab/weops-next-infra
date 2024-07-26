@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: weops-lite-job
+  namespace: weops-lite
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:16-alpine
+        command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h age -p 5432; do
+            echo "Waiting for PostgreSQL to be available..."
+            sleep 5
+          done
+          echo "PostgreSQL is available."
+          echo "PostgreSQL is available."
+          exit 0
+      - name: wait-for-keycloak
+        image: ccr.ccs.tencentyun.com/megalab/weops-lite
+        command:
+        - sh
+        - -c
+        - |
+          until curl -s keycloak:8080; do
+            echo "Waiting for keycloak to be available..."
+            sleep 5
+          done
+          echo "keycloak is available."
+          echo "keycloak is available."
+          exit 0
+      containers:
+      - name: weops-lite-init
+        image: ccr.ccs.tencentyun.com/megalab/weops-lite
+        command: 
+        - sh
+        - -c
+        - |
+          python manage.py migrate && \
+          python manage.py keycloak_init && \
+          python manage.py model_init
+        env:
+        - name: DEBUG
+          value: "False"
+        - name: DB_ENGINE
+          value: "django.db.backends.postgresql"
+        - name: DB_NAME
+          value: "weops-lite"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: weops-lite-secret
+              key: POSTGRES_PASSWORD
+        - name: DB_HOST
+          value: "age"
+        - name: DB_PORT
+          value: "5432"
+        - name: ENABLE_CELERY
+          value: "True"
+        - name: CELERY_BROKER_URL
+          value: "amqp://admin:${RABBITMQ_PASSWORD}@rabbitmq:5672"
+        - name: CELERY_RESULT_BACKEND
+          value: "db+postgresql://postgres:${POSTGRES_PASSWORD}@postgres/weops-lite"
+        - name: CELERY_BEAT_SCHEDULER
+          value: "django_celery_beat.schedulers:DatabaseScheduler"
+        - name: SALT_API_URL
+          value: ""
+        - name: SALT_API_USERNAME
+          value: ""
+        - name: SALT_API_PASSWORD
+          value: ""
+        - name: KEYCLOAK_URL
+          value: "http://keycloak:8080"
+        - name: KEYCLOAK_UI_CLIENT_ID
+          value: "weops-lite-web"
+        - name: KEYCLOAK_ADMIN_USERNAME
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: weops-lite-secret
+              key: KEYCLOAK_ADMIN_PASSWORD
+        - name: KEYCLOAK_REALM
+          value: "weops"
+        - name: KEYCLOAK_CLIENT_ID
+          value: "weops_lite"
+        - name: KEYCLOAK_CLIENT_SECRET_KEY
+          value: "w8tgxeHKyrdz1Vq6zvwqZv74UsenG2hU"
+      restartPolicy: Never
+  backoffLimit: 4
