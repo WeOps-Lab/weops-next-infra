@@ -22,15 +22,10 @@ LABEL POSTGRES_VERSION="16"
 LABEL AGE_VERSION="PG16/v1.5.0-rc0"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends --no-install-suggests \
-    bison \
-    build-essential \
+    && apt-get install -y --no-install-recommends --no-install-suggests bison build-essential \
     flex \
     postgresql-server-dev-16 \
-    locales \
-    git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    locales git && apt-get clean  && rm -rf /var/lib/apt/lists/*
 
 ENV LANG=en_US.UTF-8
 ENV LC_COLLATE=en_US.UTF-8
