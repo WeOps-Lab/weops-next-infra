@@ -37,7 +37,7 @@ ENV LC_CTYPE=en_US.UTF-8
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 \
-    git clone https://github.com/apache/age.git --branch PG16/v1.5.0-rc0 --depth 1 /age && \
+    git clone https://github.com/apache/age.git -b PG16/v1.5.0-rc0 /age && \
     cd /age && \
     make && make install && \
     cp /age/docker/docker-entrypoint-initdb.d/00-create-extension-age.sql /docker-entrypoint-initdb.d/00-create-extension-age.sql
