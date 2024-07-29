@@ -29,6 +29,8 @@ RUN apt-get update \
         postgresql-server-dev-16 \
         locales \
         git
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV LANG=en_US.UTF-8
 ENV LC_COLLATE=en_US.UTF-8
@@ -37,9 +39,9 @@ ENV LC_CTYPE=en_US.UTF-8
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 \
-    git clone https://github.com/apache/age.git age && \
+    && git config --global http.sslVerify false
+    git clone https://github.com/apache/age.git -b PG16/v1.5.0-rc0 --depth 1 /age && \
     cd /age && \
-    git checkout PG16/v1.5.0-rc0 && \
     make && make install && \
     cp /age/docker/docker-entrypoint-initdb.d/00-create-extension-age.sql /docker-entrypoint-initdb.d/00-create-extension-age.sql
 
