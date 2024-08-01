@@ -76,7 +76,7 @@ EOF
 
 render_template() {
     export LAN_IP=$(hostname -I | awk '{print $1}')
-    envsubst < manifests/weops-lite.yaml.tpl > manifests/weops-lite.yaml
+    envsubst < manifests/weops-lite/weops-lite.yaml.tpl > manifests/weops-lite/weops-lite.yaml
     source .env
     envsubst < manifests/secret.yaml.tpl > manifests/secret.yaml
     print_message "${GREEN}" "Templates rendered."

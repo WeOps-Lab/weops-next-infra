@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: age
-        image: docker-bkrepo.cwoa.net/ce1b09/weops-docker/age:PG16-1.1.5
+        image: megalab.azurecr.io/megalab/age
         env:
         - name: POSTGRES_USER
           value: "postgres"

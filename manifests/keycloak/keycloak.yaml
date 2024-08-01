@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: docker-bkrepo.cwoa.net/ce1b09/weops-docker/keycloak:23.0.5
+        image: megalab.azurecr.io/megalab/keycloak
         env:
         - name: KEYCLOAK_ADMIN
           value: "admin"
