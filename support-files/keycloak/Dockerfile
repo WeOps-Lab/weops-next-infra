@@ -1,2 +1,2 @@
-FROM keycloak/keycloak:26.0
-ADD ./theme /opt/keycloak/themes/weops-lite
+FROM bitnami/keycloak:26.0.7
+ADD ./theme /opt/bitnami/keycloak/themes/weops-lite
