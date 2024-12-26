@@ -1,12 +1,6 @@
 /* Patternfly CSS places a "bg-login.jpg" as the background on this ".login-pf" class.
    This clashes with the "keycloak-bg.png' background defined on the body below.
    Therefore the Patternfly background must be set to none. */
-   :root {
-    --pf-global--primary-color--100: rgb(41,76,255);
-    --pf-global--active-color--100: rgb(41,76,255);
-    --pf-global--primary-color--200: #526eb5;
-}
-
 .login-pf {
     background: none;
 }
@@ -28,7 +22,6 @@ textarea.pf-c-form-control {
 p.instruction {
     margin: 5px 0;
 }
-
 
 .pf-c-button.pf-m-control {
     border-color: rgba(230, 230, 230, 0.5);
@@ -60,7 +53,17 @@ h1#kc-page-title {
     font-size: var(--pf-global--FontSize--sm);
 }
 
-a#kc-current-locale-link::after {
+#kc-locale-dropdown button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--pf-global--Color--200);
+    text-align: right;
+    font-size: var(--pf-global--FontSize--sm);
+}
+
+button#kc-current-locale-link::after {
     content: "\2c5";
     margin-left: var(--pf-global--spacer--xs)
 }
@@ -80,10 +83,10 @@ a#kc-current-locale-link::after {
 div.kc-logo-text {
     background-image: url(../img/keycloak-logo-text.png);
     background-repeat: no-repeat;
-    background-size: cover;
     height: 63px;
     width: 300px;
     margin: 0 auto;
+    background-size: 100% 100%; /* 图片将拉伸以匹配容器的宽度和高度 */
 }
 
 div.kc-logo-text span {
@@ -97,14 +100,12 @@ div.kc-logo-text span {
 }
 
 #kc-header-wrapper {
-    font-size: 40px;
-    /* text-transform: uppercase; */
+    font-size: 29px;
+    text-transform: uppercase;
     letter-spacing: 3px;
     line-height: 1.2em;
     padding: 62px 10px 20px;
     white-space: normal;
-    color: #294cff;
-    font-weight: bold;
 }
 
 #kc-content {
@@ -282,6 +283,10 @@ ul#kc-totp-supported-apps {
 
 .kc-social-gray {
     color: var(--pf-global--Color--200);
+}
+
+.kc-social-gray h2 {
+    font-size: 1em;
 }
 
 .kc-social-item {
@@ -511,9 +516,9 @@ ul#kc-totp-supported-apps {
     margin: 0 auto;
     box-shadow: var(--pf-global--BoxShadow--lg);
     padding: 0 20px;
-    max-width: 450px;
+    max-width: 500px;
     border-top: 4px solid;
-    border-color: rgb(41,76,255);
+    border-color: var(--pf-global--primary-color--100);
 }
 
 /*phone*/
