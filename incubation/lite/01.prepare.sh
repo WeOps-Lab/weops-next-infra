@@ -7,7 +7,7 @@ log "INFO" "创建Docker网络..."
 docker network create $DOCKER_NETWORK
 
 # 切换到 arm64 目录
-cd ../$DIST_ARCH
+cd ./$DIST_ARCH
 
 # 遍历 arm64 目录下的所有子目录
 for dir in */; do
