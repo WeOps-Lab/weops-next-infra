@@ -20,4 +20,4 @@ docker run -itd --name fusion-collectior-client \
     -e SERVER_API_TOKEN=$SIDECAR_INIT_TOKEN \
     --network $DOCKER_NETWORK \
     --hostname fusion-collectior-client \
-    megalab/fusion-collector	
+    $DOCKER_IMAGE_FUSION_COLLECTOR
