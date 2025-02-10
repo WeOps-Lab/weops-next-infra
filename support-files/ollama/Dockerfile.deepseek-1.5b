@@ -1,0 +1,17 @@
+FROM ollama/ollama:latest
+
+# 安装 supervisor
+RUN apt-get update && apt-get install -y supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+# 预先拉取模型
+RUN ollama pull deepseek-coder:1.5b
+
+# 配置 supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# 暴露 Ollama API 端口
+EXPOSE 11434
+
+# 使用 supervisor 作为入口点
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
