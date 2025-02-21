@@ -1,4 +1,4 @@
-package io.github.yanfeiwuji.justauth.social.common;
+package org.neverland.social.common;
 
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthDefaultRequest;
@@ -7,10 +7,6 @@ import org.keycloak.models.IdentityProviderModel;
 
 import java.util.function.Function;
 
-/**
- * @author yanfeiwuji
- * @since 2021/1/12 7:53 下午
- */
 public class JustAuthIdentityProviderConfig extends OAuth2IdentityProviderConfig {
 
     private static final String AGENT_ID_KEY = "weworkAgentId";

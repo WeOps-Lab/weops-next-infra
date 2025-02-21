@@ -1,4 +1,4 @@
-package io.github.yanfeiwuji.justauth.social.compatible;
+package org.neverland.social.compatible;
 
 import com.alibaba.fastjson.JSONObject;
 import me.zhyd.oauth.cache.AuthStateCache;
