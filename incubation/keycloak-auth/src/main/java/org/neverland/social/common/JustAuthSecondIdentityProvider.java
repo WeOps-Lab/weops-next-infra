@@ -122,7 +122,7 @@ public class JustAuthSecondIdentityProvider
 
                 logger.infof("URL Info: %s", providerConfig.getAuthorizationUrl());
                 logger.infof("Token URL Info: %s", providerConfig.getTokenUrl());
-                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, providerConfig.getTokenUrl());
+                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, "https://auth.etherfurnace.cn/realms/etherfurnace/broker/gitee/endpoint");
                 logger.infof("auth config, id: %s, secret: %s, redirect: %s",
                         AUTH_CONFIG.getClientId(), AUTH_CONFIG.getClientSecret(), AUTH_CONFIG.getRedirectUri());
                 AuthResponse<AuthUser> response = authRequest.login(authCallback);
