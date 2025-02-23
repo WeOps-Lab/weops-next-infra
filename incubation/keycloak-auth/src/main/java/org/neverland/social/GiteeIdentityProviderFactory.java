@@ -1,5 +1,6 @@
 package org.neverland.social;
 
+import me.zhyd.oauth.config.AuthConfig;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
