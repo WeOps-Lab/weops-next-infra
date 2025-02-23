@@ -107,6 +107,7 @@ public enum JustAuthKey {
         String agentId = config.getAgentId();
         String alipayPublicKey = config.getAlipayPublicKey();
         String codingGroupName = config.getCodingGroupName();
+        String oauthCallbackUrl = config.getOauthCallbackUrl();
 
         AuthConfig.AuthConfigBuilder authConfigBuilder = justAuthKey.getAuthConfig().clientId(clientId).clientSecret(clientSecret);
         switch (justAuthKey) {
@@ -119,6 +120,7 @@ public enum JustAuthKey {
                 // coding 的 codingGroupName 为 domainPrefix
                 authConfigBuilder.domainPrefix(codingGroupName);
         }
+        authConfigBuilder.redirectUri(oauthCallbackUrl);
 
         HttpConfig httpConfig = HttpConfig.builder().timeout(20000).build();
         authConfigBuilder.httpConfig(httpConfig);

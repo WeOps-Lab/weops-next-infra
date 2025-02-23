@@ -7,6 +7,8 @@ import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import me.zhyd.oauth.request.AuthGiteeRequest;
+import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.neverland.social.common.JustAuthIdentityProviderConfig;
 import org.neverland.social.common.JustAuthKey;
 import org.neverland.social.common.JustAuthSecondIdentityProvider;
@@ -41,4 +43,14 @@ public class GiteeIdentityProviderFactory extends
         return JUST_AUTH_KEY.getId();
     }
 
+    @Override
+    public List<ProviderConfigProperty> getConfigProperties() {
+        return ProviderConfigurationBuilder.create().property()
+                .name("oauthCallbackUrl")
+                .label("OAuth Callback Url")
+                .helpText("OAuth callback url.")
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .required(true)
+                .add().build();
+    }
 }

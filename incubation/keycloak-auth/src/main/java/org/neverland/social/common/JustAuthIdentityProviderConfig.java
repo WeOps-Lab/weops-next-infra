@@ -12,6 +12,7 @@ public class JustAuthIdentityProviderConfig extends OAuth2IdentityProviderConfig
     private static final String AGENT_ID_KEY = "weworkAgentId";
     private static final String ALIPAY_PUBLIC_KEY = "alipayPublicKey";
     private static final String CODING_GROUP_NAME = "codingGroupName";
+    private static final String OAUTH_CALLBACK_URL = "oauthCallbackUrl";
 
     private final JustAuthKey justAuthKey;
     private final Function<AuthConfig, AuthDefaultRequest> authToReqFunc;
@@ -27,6 +28,14 @@ public class JustAuthIdentityProviderConfig extends OAuth2IdentityProviderConfig
 
     public JustAuthKey getJustAuthKey() {
         return this.justAuthKey;
+    }
+
+    public String getOauthCallbackUrl() {
+        return getConfig().get(OAUTH_CALLBACK_URL);
+    }
+
+    public void setOauthCallbackUrl(String oauthCallbackUrl) {
+        getConfig().put(OAUTH_CALLBACK_URL, oauthCallbackUrl);
     }
 
     public String getAgentId() {
