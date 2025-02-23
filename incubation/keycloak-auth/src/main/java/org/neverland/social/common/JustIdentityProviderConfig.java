@@ -1,4 +1,4 @@
-package org.neverland.social.common;
+package io.github.yanfeiwuji.justauth.social.common;
 
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthDefaultRequest;
@@ -6,24 +6,33 @@ import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class JustAuthIdentityProviderConfig extends OAuth2IdentityProviderConfig {
+/**
+ * @author yanfeiwuji
+ * @date 2021/1/12 7:53 下午
+ */
+public class JustIdentityProviderConfig<T extends AuthDefaultRequest> extends OAuth2IdentityProviderConfig {
 
     private static final String AGENT_ID_KEY = "weworkAgentId";
     private static final String ALIPAY_PUBLIC_KEY = "alipayPublicKey";
     private static final String CODING_GROUP_NAME = "codingGroupName";
 
     private final JustAuthKey justAuthKey;
-    private final Function<AuthConfig, AuthDefaultRequest> authToReqFunc;
+    private final Function<AuthConfig, T> authToReqFunc;
 
-    public JustAuthIdentityProviderConfig(IdentityProviderModel model,
-                                          JustAuthKey justAuthKey,
-                                          Function<AuthConfig, AuthDefaultRequest> authToReqFunc) {
+    public JustIdentityProviderConfig(IdentityProviderModel model, JustAuthKey justAuthKey, Function<AuthConfig, T> authToReqFunc) {
         super(model);
         this.justAuthKey = justAuthKey;
         this.authToReqFunc = authToReqFunc;
 
     }
+
+    public JustIdentityProviderConfig(JustAuthKey justAuthKey, Function<AuthConfig, T> authToReqFunc) {
+        this.justAuthKey = justAuthKey;
+        this.authToReqFunc = authToReqFunc;
+    }
+
 
     public JustAuthKey getJustAuthKey() {
         return this.justAuthKey;
@@ -53,7 +62,7 @@ public class JustAuthIdentityProviderConfig extends OAuth2IdentityProviderConfig
         getConfig().put(CODING_GROUP_NAME, codingGroupName);
     }
 
-    public Function<AuthConfig, AuthDefaultRequest> getAuthToReqFunc() {
+    public Function<AuthConfig, T> getAuthToReqFunc() {
         return authToReqFunc;
     }
 }

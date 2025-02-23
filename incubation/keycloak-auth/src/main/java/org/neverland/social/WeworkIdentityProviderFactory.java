@@ -1,55 +1,43 @@
-package org.neverland.social;
+package io.github.yanfeiwuji.justauth.social;
 
+import io.github.yanfeiwuji.justauth.social.common.JustAuthKey;
+import io.github.yanfeiwuji.justauth.social.common.JustIdentityProvider;
+import io.github.yanfeiwuji.justauth.social.common.JustIdentityProviderConfig;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.provider.ProviderConfigurationBuilder;
-import org.neverland.social.common.JustAuthIdentityProviderConfig;
-import org.neverland.social.common.JustAuthKey;
-import org.neverland.social.common.JustAuthSecondIdentityProvider;
-import org.neverland.social.compatible.JustAuthWeChatEnterpriseQrcodeV2Request;
-import java.util.List;
+import me.zhyd.oauth.request. AuthWeChatEnterpriseQrcodeRequest;
 
+/**
+ * @author yanfeiwuji
+ * @date 2021/1/10 5:48 下午
+ */
 
 public class WeworkIdentityProviderFactory extends
-        AbstractIdentityProviderFactory<JustAuthSecondIdentityProvider>
-        implements SocialIdentityProviderFactory<JustAuthSecondIdentityProvider> {
+        AbstractIdentityProviderFactory<JustIdentityProvider< AuthWeChatEnterpriseQrcodeRequest>>
+        implements SocialIdentityProviderFactory<JustIdentityProvider< AuthWeChatEnterpriseQrcodeRequest>> {
 
-    public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.WEWORK;
+  public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.  WEWORK;
 
-    @Override
-    public String getName() {
-        return JUST_AUTH_KEY.getName();
-    }
+  @Override
+  public String getName() {
+    return JUST_AUTH_KEY.getName();
+  }
 
-    @Override
-    public JustAuthSecondIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
-        return new JustAuthSecondIdentityProvider(session,
-                new JustAuthIdentityProviderConfig(model, JUST_AUTH_KEY, JustAuthWeChatEnterpriseQrcodeV2Request::new));
-    }
+  @Override
+  public JustIdentityProvider< AuthWeChatEnterpriseQrcodeRequest> create(KeycloakSession session, IdentityProviderModel model) {
+    return new JustIdentityProvider<>(session, new JustIdentityProviderConfig<>(model,JUST_AUTH_KEY, AuthWeChatEnterpriseQrcodeRequest::new));
+  }
 
-    @Override
-    public OAuth2IdentityProviderConfig createConfig() {
-        return new OAuth2IdentityProviderConfig();
-    }
+  @Override
+  public OAuth2IdentityProviderConfig createConfig() {
+    return new OAuth2IdentityProviderConfig();
+  }
 
-    @Override
-    public String getId() {
-        return JUST_AUTH_KEY.getId();
-    }
-
-    @Override
-    public List<ProviderConfigProperty> getConfigProperties() {
-        return ProviderConfigurationBuilder.create().property()
-                .name("weworkAgentId")
-                .label("Agent Id")
-                .helpText("agent id.")
-                .type(ProviderConfigProperty.STRING_TYPE)
-                .required(true)
-                .add().build();
-    }
-
+  @Override
+  public String getId() {
+    return JUST_AUTH_KEY.getId();
+  }
 }

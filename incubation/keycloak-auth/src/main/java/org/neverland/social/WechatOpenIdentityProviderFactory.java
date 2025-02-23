@@ -1,41 +1,43 @@
-package org.neverland.social;
+package io.github.yanfeiwuji.justauth.social;
 
-import me.zhyd.oauth.request.AuthGiteeRequest;
+import io.github.yanfeiwuji.justauth.social.common.JustAuthKey;
+import io.github.yanfeiwuji.justauth.social.common.JustIdentityProvider;
+import io.github.yanfeiwuji.justauth.social.common.JustIdentityProviderConfig;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
-import org.neverland.social.common.JustAuthIdentityProviderConfig;
-import org.neverland.social.common.JustAuthKey;
-import org.neverland.social.common.JustAuthSecondIdentityProvider;
 import me.zhyd.oauth.request. AuthWeChatOpenRequest;
 
+/**
+ * @author yanfeiwuji
+ * @date 2021/1/10 5:48 下午
+ */
+
 public class WechatOpenIdentityProviderFactory extends
-        AbstractIdentityProviderFactory<JustAuthSecondIdentityProvider>
-        implements SocialIdentityProviderFactory<JustAuthSecondIdentityProvider> {
+        AbstractIdentityProviderFactory<JustIdentityProvider< AuthWeChatOpenRequest>>
+        implements SocialIdentityProviderFactory<JustIdentityProvider< AuthWeChatOpenRequest>> {
 
-    public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.WE_CHAT_OPEN;
+  public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.  WE_CHAT_OPEN;
 
-    @Override
-    public String getName() {
-        return JUST_AUTH_KEY.getName();
-    }
+  @Override
+  public String getName() {
+    return JUST_AUTH_KEY.getName();
+  }
 
-    @Override
-    public JustAuthSecondIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
-        return new JustAuthSecondIdentityProvider(session,
-                new JustAuthIdentityProviderConfig(model, JUST_AUTH_KEY, AuthWeChatOpenRequest::new));
-    }
+  @Override
+  public JustIdentityProvider< AuthWeChatOpenRequest> create(KeycloakSession session, IdentityProviderModel model) {
+    return new JustIdentityProvider<>(session, new JustIdentityProviderConfig<>(model,JUST_AUTH_KEY, AuthWeChatOpenRequest::new));
+  }
 
-    @Override
-    public OAuth2IdentityProviderConfig createConfig() {
-        return new OAuth2IdentityProviderConfig();
-    }
+  @Override
+  public OAuth2IdentityProviderConfig createConfig() {
+    return new OAuth2IdentityProviderConfig();
+  }
 
-    @Override
-    public String getId() {
-        return JUST_AUTH_KEY.getId();
-    }
-
+  @Override
+  public String getId() {
+    return JUST_AUTH_KEY.getId();
+  }
 }

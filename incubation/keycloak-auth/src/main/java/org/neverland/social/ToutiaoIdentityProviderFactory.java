@@ -8,18 +8,18 @@ import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
-import me.zhyd.oauth.request.AuthWeChatMpRequest;
+import me.zhyd.oauth.request. AuthToutiaoRequest;
 
 /**
  * @author yanfeiwuji
  * @date 2021/1/10 5:48 下午
  */
 
-public class WechatMpIdentityProviderFactory extends
-        AbstractIdentityProviderFactory<JustIdentityProvider<AuthWeChatMpRequest>>
-        implements SocialIdentityProviderFactory<JustIdentityProvider<AuthWeChatMpRequest>> {
+public class ToutiaoIdentityProviderFactory extends
+        AbstractIdentityProviderFactory<JustIdentityProvider< AuthToutiaoRequest>>
+        implements SocialIdentityProviderFactory<JustIdentityProvider< AuthToutiaoRequest>> {
 
-  public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.  WE_CHAT_MP;
+  public static final JustAuthKey JUST_AUTH_KEY = JustAuthKey.  TOUTIAO;
 
   @Override
   public String getName() {
@@ -27,8 +27,8 @@ public class WechatMpIdentityProviderFactory extends
   }
 
   @Override
-  public JustIdentityProvider<AuthWeChatMpRequest> create(KeycloakSession session, IdentityProviderModel model) {
-    return new JustIdentityProvider<>(session, new JustIdentityProviderConfig<>(model,JUST_AUTH_KEY,AuthWeChatMpRequest::new));
+  public JustIdentityProvider< AuthToutiaoRequest> create(KeycloakSession session, IdentityProviderModel model) {
+    return new JustIdentityProvider<>(session, new JustIdentityProviderConfig<>(model,JUST_AUTH_KEY, AuthToutiaoRequest::new));
   }
 
   @Override
