@@ -1,8 +1,8 @@
-package io.github.yanfeiwuji.justauth.social;
+package org.neverland.social;
 
-import io.github.yanfeiwuji.justauth.social.common.JustAuthKey;
-import io.github.yanfeiwuji.justauth.social.common.JustIdentityProvider;
-import io.github.yanfeiwuji.justauth.social.common.JustIdentityProviderConfig;
+import org.neverland.social.common.JustAuthKey;
+import org.neverland.social.common.JustIdentityProvider;
+import org.neverland.social.common.JustIdentityProviderConfig;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;

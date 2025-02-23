@@ -1,4 +1,4 @@
-package io.github.yanfeiwuji.justauth.social.common;
+package org.neverland.social.common;
 
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.enums.scope.AuthBaiduScope;

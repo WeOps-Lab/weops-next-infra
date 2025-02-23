@@ -1,4 +1,4 @@
-package io.github.yanfeiwuji.justauth.social.common;
+package org.neverland.social.common;
 
 
 import cn.hutool.json.JSONUtil;
