@@ -12,6 +12,7 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthDefaultRequest;
 import me.zhyd.oauth.request.AuthRequest;
+import org.apache.http.auth.AUTH;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.OAuthErrorException;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
@@ -113,17 +114,20 @@ public class JustAuthSecondIdentityProvider
                     return errorIdentityProviderLogin(Messages.IDENTITY_PROVIDER_MISSING_CODE_OR_ERROR_ERROR);
                 }
 
+                logger.infof("authResponse: authorizationCode=%s state=%s", authorizationCode, state);
                 AuthCallback authCallback = AuthCallback.builder()
                         .code(authorizationCode)
                         .state(state)
                         .build();
 
                 String redirectUri = "http://confluence.qifu.com/";
-                logger.infof("authCallback: %s", authCallback);
-                logger.infof("auth config: %s", AUTH_CONFIG);
+
                 AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, redirectUri);
+                logger.infof("auth config, id: %s, secret: %s, redirect: %s",
+                        AUTH_CONFIG.getClientId(), AUTH_CONFIG.getClientSecret(), AUTH_CONFIG.getRedirectUri());
                 AuthResponse<AuthUser> response = authRequest.login(authCallback);
 
+                logger.infof("authResponse: response=%s", response.getMsg());
                 if (!response.ok()) {
                     logger.errorf("Unexpected response from token endpoint %s. status=%s, response=%s",
                             "null", response.getCode(), response);
