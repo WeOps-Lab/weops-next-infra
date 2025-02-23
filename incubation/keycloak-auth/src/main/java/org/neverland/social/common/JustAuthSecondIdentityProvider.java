@@ -120,7 +120,9 @@ public class JustAuthSecondIdentityProvider
                         .state(state)
                         .build();
 
-                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, authSession.getRedirectUri());
+                logger.infof("URL Info: %s", providerConfig.getAuthorizationUrl());
+                logger.infof("Token URL Info: %s", providerConfig.getTokenUrl());
+                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, providerConfig.getTokenUrl());
                 logger.infof("auth config, id: %s, secret: %s, redirect: %s",
                         AUTH_CONFIG.getClientId(), AUTH_CONFIG.getClientSecret(), AUTH_CONFIG.getRedirectUri());
                 AuthResponse<AuthUser> response = authRequest.login(authCallback);
