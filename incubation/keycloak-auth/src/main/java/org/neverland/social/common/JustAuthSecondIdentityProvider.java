@@ -118,10 +118,10 @@ public class JustAuthSecondIdentityProvider
                         .state(state)
                         .build();
 
-//                String redirectUri = "http://confluence.qifu.com/";
+                String redirectUri = "http://confluence.qifu.com/";
                 logger.infof("authCallback: %s", authCallback);
-                logger.infof("redirectUri: %s", AUTH_CONFIG.getRedirectUri());
-                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, AUTH_CONFIG.getRedirectUri());
+                logger.infof("auth config: %s", AUTH_CONFIG);
+                AuthRequest authRequest = getAuthRequest(AUTH_CONFIG, redirectUri);
                 AuthResponse<AuthUser> response = authRequest.login(authCallback);
 
                 if (!response.ok()) {
