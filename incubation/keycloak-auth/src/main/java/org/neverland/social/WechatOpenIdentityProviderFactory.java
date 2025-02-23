@@ -6,10 +6,14 @@ import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.neverland.social.common.JustAuthIdentityProviderConfig;
 import org.neverland.social.common.JustAuthKey;
 import org.neverland.social.common.JustAuthSecondIdentityProvider;
-import me.zhyd.oauth.request. AuthWeChatOpenRequest;
+import me.zhyd.oauth.request.AuthWeChatOpenRequest;
+
+import java.util.List;
 
 public class WechatOpenIdentityProviderFactory extends
         AbstractIdentityProviderFactory<JustAuthSecondIdentityProvider>
@@ -38,4 +42,14 @@ public class WechatOpenIdentityProviderFactory extends
         return JUST_AUTH_KEY.getId();
     }
 
+    @Override
+    public List<ProviderConfigProperty> getConfigProperties() {
+        return ProviderConfigurationBuilder.create().property()
+                .name("oauthCallbackUrl")
+                .label("OAuth Callback Url")
+                .helpText("OAuth callback url.")
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .required(true)
+                .add().build();
+    }
 }

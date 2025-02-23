@@ -43,13 +43,22 @@ public class WeworkIdentityProviderFactory extends
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return ProviderConfigurationBuilder.create().property()
+        return ProviderConfigurationBuilder.create()
+                .property()
                 .name("weworkAgentId")
                 .label("Agent Id")
                 .helpText("agent id.")
                 .type(ProviderConfigProperty.STRING_TYPE)
                 .required(true)
-                .add().build();
+                .add()
+                .property()
+                .name("oauthCallbackUrl")
+                .label("OAuth Callback Url")
+                .helpText("OAuth callback url.")
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .required(true)
+                .add()
+                .build();
     }
 
 }
