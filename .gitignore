@@ -4,4 +4,4 @@ dist/
 *.jar
 .idea/
 *.iml
-incubation/kubernetes/infra/*/*/*/*.env
+incubation/kubernetes/*/*/*/*/*.env
