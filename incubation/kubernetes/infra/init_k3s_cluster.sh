@@ -45,7 +45,10 @@ apt update
 apt install -y nfs-common ca-certificates curl
 log "系统依赖包安装完成"
 
+
 # 配置K3s安装参数
+# 允许空变量
+set +u
 if [[ -n $WAN_IP ]]; then
     log "检测到WAN IP，将配置wireguard"
     INSTALL_K3S_EXEC="--tls-san $WAN_IP --node-ip $LAN_IP -o /root/.kube/config --flannel-backend wireguard-native --flannel-external-ip --service-node-port-range 1-65535 --docker"
@@ -53,6 +56,7 @@ else
     log "未检测到WAN IP，使用标准配置"
     INSTALL_K3S_EXEC="--node-ip $LAN_IP -o /root/.kube/config --service-node-port-range 1-65535 --docker"
 fi
+set -u
 
 K3S_NODE_NAME="prod-ops-pilot-master"
 
@@ -97,7 +101,7 @@ log "Docker安装和配置完成"
 # 安装k3s
 log "开始安装K3s..."
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | sh -
-systemctl enable k3s
+systemctl enable k3s --now
 log "K3s安装完成"
 
 # 等待集群ready
