@@ -16,7 +16,7 @@ spec:
     spec:   
       containers:
       - name: keycloak
-        image: ccr.ccs.tencentyun.com/megalab/keycloak:26.1.1
+        image: ccr.ccs.tencentyun.com/megalab/keycloak:26.1.0
         args:
           - "start"
         env:

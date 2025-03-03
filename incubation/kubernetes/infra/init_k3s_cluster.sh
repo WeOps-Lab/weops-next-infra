@@ -42,7 +42,7 @@ fi
 # 安装需要的apt包
 log "开始安装系统依赖包..."
 apt update
-apt install -y nfs-common ca-certificates curl
+apt install -y nfs-common ca-certificates curl open-iscsi
 log "系统依赖包安装完成"
 
 
@@ -51,14 +51,14 @@ log "系统依赖包安装完成"
 set +u
 if [[ -n $WAN_IP ]]; then
     log "检测到WAN IP，将配置wireguard"
-    INSTALL_K3S_EXEC="--tls-san $WAN_IP --node-ip $LAN_IP -o /root/.kube/config --flannel-backend wireguard-native --flannel-external-ip --service-node-port-range 1-65535 --docker"
+    export INSTALL_K3S_EXEC="--tls-san $WAN_IP --node-ip $LAN_IP -o /root/.kube/config --flannel-backend wireguard-native --flannel-external-ip --service-node-port-range 1-65535 --docker"
 else
     log "未检测到WAN IP，使用标准配置"
-    INSTALL_K3S_EXEC="--node-ip $LAN_IP -o /root/.kube/config --service-node-port-range 1-65535 --docker"
+    export INSTALL_K3S_EXEC="--node-ip $LAN_IP -o /root/.kube/config --service-node-port-range 1-65535 --docker"
 fi
 set -u
 
-K3S_NODE_NAME="prod-ops-pilot-master"
+export K3S_NODE_NAME="prod-ops-pilot-master"
 
 # 添加允许ipv4转发的内核参数
 log "配置内核参数..."
@@ -116,10 +116,85 @@ log "K3s节点已就绪"
 log "开始安装Longhorn..."
 kubectl apply -f longhorn/longhorn.yaml
 log "等待Longhorn组件就绪..."
-while [[ $(kubectl get pods -n longhorn-system | grep longhorn | awk '{print $3}') != "Running" ]]; do
-    log "正在等待Longhorn pods就绪..."
+# 定义资源名称和临时文件路径
+PVC_NAME="longhorn-ready-check-pvc"
+POD_NAME="longhorn-ready-check-pod"
+PVC_YAML="/tmp/${PVC_NAME}.yaml"
+POD_YAML="/tmp/${POD_NAME}.yaml"
+
+# 清理可能存在的残留资源
+kubectl delete pod "$POD_NAME" --ignore-not-found &>/dev/null
+kubectl delete pvc "$PVC_NAME" --ignore-not-found &>/dev/null
+
+# 持续轮询 Pod 状态，直到状态为 Running
+while true; do
+    LONGHORN_SC=$(kubectl get storageclass -o jsonpath="{.items[?(@.provisioner=='driver.longhorn.io')].metadata.name}" | awk '{print $1}')
+    if [[ -z "$LONGHORN_SC" ]]; then
+        log "等待longhorn StorageClass就绪..."
+        sleep 5
+    else
+        log "Longhorn StorageClass已就绪: $LONGHORN_SC"
+        break
+    fi
+done
+
+# 生成 PVC YAML 文件
+cat > "$PVC_YAML" <<EOF
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${PVC_NAME}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ${LONGHORN_SC}
+EOF
+
+# 生成 Pod YAML 文件，该 Pod 挂载上面的 PVC，并持续运行（sleep 3600秒）
+cat > "$POD_YAML" <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ${POD_NAME}
+spec:
+  restartPolicy: Never
+  containers:
+  - name: test-container
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - mountPath: "/mnt/test"
+      name: test-volume
+  volumes:
+  - name: test-volume
+    persistentVolumeClaim:
+      claimName: ${PVC_NAME}
+EOF
+
+# 应用 PVC 和 Pod 定义
+kubectl apply -f "$PVC_YAML"
+kubectl apply -f "$POD_YAML"
+
+log "检测 Pod 状态以判断 Longhorn 就绪状态..."
+# 持续轮询 Pod 状态，直到状态为 Running
+while true; do
+    POD_PHASE=$(kubectl get pod "$POD_NAME" -o jsonpath="{.status.phase}" 2>/dev/null || echo "")
+    if [[ "$POD_PHASE" == "Running" ]]; then
+        break
+    fi
+    log "Longhorn 未就绪, 当前 Pod 状态为 [$POD_PHASE] ... 正在等待"
     sleep 5
 done
+
+# 清理测试资源
+kubectl delete pod "$POD_NAME" &>/dev/null
+kubectl delete pvc "$PVC_NAME" &>/dev/null
+rm -f "$PVC_YAML" "$POD_YAML"
+
+log "Longhorn 就绪"
 log "Longhorn安装完成"
 
 log "K3s集群初始化完成!"
